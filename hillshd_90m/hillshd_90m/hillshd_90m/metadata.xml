@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<metadata>
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd"&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"&gt;
+&lt;title&gt;SRTM Data Collection&lt;/title&gt;
+&lt;link rel=schema.dc href="http://purl.org/metadata/dublin_core"&gt;
+&lt;meta name="dc.title" content="SRTM Data Collection "&gt;
+&lt;meta name="dc.creator" content="NASA, NIMA, DLR, and ASI "&gt;
+&lt;meta name="dc.subject" content="EARTH SCIENCE LAND SURFACE TOPOGRAPHY LANDFORMS TERRAIN ELEVATION 1-DEGREE DEM 1-ARC-SECOND DEM DEM DIGITAL SURFACE MODEL "&gt;
+&lt;meta name="dc.description" content="The Shuttle Radar Topography Mission (SRTM) aboard the Space Shuttle Endeavour, launched on Feb. 11, 2000. SRTM used the same radar instrument that comprised the Spaceborne Imaging Radar-C/X-Band Synthetic Aperture Radar (SIR-C/X-SAR) that flew twice on the Space Shuttle Endeavour in 1994. SRTM was assigned to collect 3-D measurements of the Earth's surface. To collect the 3-D data, engineers added a 60-meter (approximately 200-foot) mast, installed additional C-band and X-band antennas, and improved tracking and navigation devices. The mission is a cooperative project between NASA, the National Imagery and Mapping Agency (NIMA) of the U.S. Department of Defense and the German and Italian space agencies. It is managed by NASA's Jet Propulsion Laboratory (JPL), Pasadena, CA, for NASA's Earth Science Enterprise, Washington, D.C. "&gt;
+&lt;meta name="dc.publisher" content="EROS Data Center"&gt;
+&lt;meta name="dc.date" content="2000"&gt;
+&lt;meta name="dc.type" content="data.raster digital data"&gt;
+&lt;meta name="dc.identifier" content="&amp;lt;http://seamless.usgs.gov&amp;gt;"&gt;
+&lt;meta name="dc.source" content="Downloadable Data"&gt;
+&lt;meta name="dc.lang" content="en"&gt;
+&lt;meta name="dc.coverage.x.min" scheme="DD" content="33.908859"&gt;
+&lt;meta name="dc.coverage.x.max" scheme="DD" content="41.911359"&gt;
+&lt;meta name="dc.coverage.y.min" scheme="DD" content="-4.680452"&gt;
+&lt;meta name="dc.coverage.y.max" scheme="DD" content="5.427881"&gt;
+&lt;meta name="dc.coverage.placeName" content="Kenya"&gt;
+&lt;meta name="dc.coverage.placeName" content="Africa"&gt;
+&lt;meta name="dc.coverage.t.min" content="20000211"&gt;
+&lt;meta name="dc.coverage.t.max" content="20000222"&gt;
+&lt;meta name="dc.rights" content="Access constraints: None; Use constraints: None. Acknowledgement of the originating agencies would be appreciated in products derived from these data."&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h3&gt;SRTM Data Collection&lt;/h3&gt;
+<metadata>also available as&lt;p&gt;</metadata>
+&lt;h4&gt;Frequently-anticipated questions:&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;A HREF="#what"&gt;What does this data set describe?&lt;/A&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;A HREF="#what.1"&gt;How should this data set be cited?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#what.2"&gt;What geographic area does the data set cover?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#what.3"&gt;What does it look like?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#what.4"&gt;Does the data set describe conditions during a particular time period?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#what.5"&gt;What is the general form of this data set?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#what.6"&gt;How does the data set represent geographic features?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#what.7"&gt;How does the data set describe geographic features?&lt;/A&gt;
+&lt;/ol&gt;
+&lt;li&gt;&lt;A HREF="#who"&gt;Who produced the data set?&lt;/A&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;A HREF="#who.1"&gt;Who are the originators of the data set?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#who.2"&gt;Who also contributed to the data set?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#who.3"&gt;To whom should users address questions about the data?&lt;/A&gt;
+&lt;/ol&gt;
+&lt;li&gt;&lt;A HREF="#why"&gt;Why was the data set created?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#how"&gt;How was the data set created?&lt;/A&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;A HREF="#how.1"&gt;From what previous works were the data drawn?&lt;/a&gt;
+&lt;li&gt;&lt;A HREF="#how.2"&gt;How were the data generated, processed, and modified?&lt;/a&gt;
+&lt;li&gt;&lt;A HREF="#how.3"&gt;What similar or related data should the user be aware of?&lt;/a&gt;
+&lt;/ol&gt;
+&lt;li&gt;&lt;A HREF="#quality"&gt;How reliable are the data; what problems remain in the data set?&lt;/A&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;A HREF="#quality.1"&gt;How well have the observations been checked?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#quality.2"&gt;How accurate are the geographic locations?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#quality.3"&gt;How accurate are the heights or depths?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#quality.4"&gt;Where are the gaps in the data?  What is missing?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#quality.5"&gt;How consistent are the relationships among the data, including topology?&lt;/A&gt;
+&lt;/ol&gt;
+&lt;li&gt;&lt;A HREF="#getacopy"&gt;How can someone get a copy of the data set?&lt;/A&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;A HREF="#getacopy.0"&gt;Are there legal restrictions on access or use of the data?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#getacopy.1"&gt;Who distributes the data?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#getacopy.2"&gt;What's the catalog number I need to order this data set?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#getacopy.3"&gt;What legal disclaimers am I supposed to read?&lt;/A&gt;
+&lt;li&gt;&lt;A HREF="#getacopy.4"&gt;How can I download or order the data?&lt;/A&gt;
+&lt;/ol&gt;
+&lt;li&gt;&lt;A HREF="#metaref"&gt;Who wrote the metadata?&lt;/A&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3&gt;&lt;A NAME="what"&gt;What does this data set describe?&lt;/A&gt;&lt;/h3&gt;
+&lt;div style="margin-left: 2em"&gt;
+&lt;dl&gt;
+&lt;dt&gt;&lt;em&gt;Title:&lt;/em&gt;  SRTM Data Collection&lt;/dt&gt;
+&lt;dt&gt;&lt;em&gt;Abstract:&lt;/em&gt;
+&lt;dd&gt;
+
+The Shuttle Radar Topography Mission (SRTM) aboard the Space Shuttle Endeavour, launched on Feb. 11, 2000. SRTM used the same radar instrument that comprised the Spaceborne Imaging Radar-C/X-Band Synthetic Aperture Radar (SIR-C/X-SAR) that flew twice on the Space Shuttle Endeavour in 1994. SRTM was assigned to collect 3-D measurements of the Earth's surface. To collect the 3-D data, engineers added a 60-meter (approximately 200-foot) mast, installed additional C-band and X-band antennas, and improved tracking and navigation devices. The mission is a cooperative project between NASA, the National Imagery and Mapping Agency (NIMA) of the U.S. Department of Defense and the German and Italian space agencies. It is managed by NASA's Jet Propulsion Laboratory (JPL), Pasadena, CA, for NASA's Earth Science Enterprise, Washington, D.C.
+
+&lt;/dd&gt;
+&lt;dt&gt;&lt;em&gt;Supplemental_Information:&lt;/em&gt;
+&lt;dd&gt;
+
+Additional Reference: &amp;lt;&lt;A HREF="http://www.jpl.nasa.gov/srtm/index.html"&gt;http://www.jpl.nasa.gov/srtm/index.html&lt;/A&gt;&amp;gt; /edcsns18/ned3/srtm/united_states/metadata/citation_abbrev.tif Processing Information: Program Name: SRTM2DSM.AML Purpose: Create a polygonal footprint for each 1x1 degree tile of SRTM data processed. The attributes of each tile, such as, resolution and date processed, are linked to this polygonal footprint. Procedure: Generate footprint Build topology Add and populate attributes Define projection as geographic with WGS84 datum Convert to shapefile Environment: Microsoft Windows 2000 Version 5.0 (Build 2195) Service Pack 2; ESRI ArcInfo Workstation 8.2
+
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;A NAME="what.1"&gt;&lt;b&gt;How should this data set be cited?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;blockquote&gt;
+NASA, NIMA, DLR, and ASI, 2000, SRTM Data Collection.&lt;p&gt;
+Online Links:
+&lt;ul&gt;
+&lt;li&gt;&amp;lt;&lt;A HREF="http://seamless.usgs.gov"&gt;http://seamless.usgs.gov&lt;/A&gt;&amp;gt;
+&lt;/ul&gt;
+&lt;p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;A NAME="what.2"&gt;&lt;b&gt;What geographic area does the data set cover?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;dl&gt;
+&lt;dt&gt;&lt;em&gt;West_Bounding_Coordinate:&lt;/em&gt;  33.908859&lt;/dt&gt;
+&lt;dt&gt;&lt;em&gt;East_Bounding_Coordinate:&lt;/em&gt;  41.911359&lt;/dt&gt;
+&lt;dt&gt;&lt;em&gt;North_Bounding_Coordinate:&lt;/em&gt;  5.427881&lt;/dt&gt;
+&lt;dt&gt;&lt;em&gt;South_Bounding_Coordinate:&lt;/em&gt;  -4.680452&lt;/dt&gt;
+&lt;/dl&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;A NAME="what.3"&gt;&lt;b&gt;What does it look like?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;A NAME="what.4"&gt;&lt;b&gt;Does the data set describe conditions during a particular time period?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;dl&gt;
+&lt;dt&gt;Beginning_Date: 11-Feb-2000&lt;dt&gt;Ending_Date: 22-Feb-2000&lt;dt&gt;&lt;em&gt;Currentness_Reference:&lt;/em&gt;  publication date&lt;/dt&gt;
+&lt;/dl&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;A NAME="what.5"&gt;&lt;b&gt;What is the general form of this data set?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;dl&gt;
+&lt;dt&gt;&lt;em&gt;Geospatial_Data_Presentation_Form:&lt;/em&gt;  raster digital data&lt;/dt&gt;
+&lt;/dl&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;A NAME="what.6"&gt;&lt;b&gt;How does the data set represent geographic features?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;ol type="a"&gt;
+&lt;li&gt;&lt;A NAME="what.6.a"&gt;&lt;b&gt;How are geographic features stored in the data set?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+This is a Raster data set.
+It contains the following raster data types:
+&lt;ul&gt;
+&lt;li&gt; Dimensions 12130 x 9603 x 1, type Grid Cell
+&lt;/ul&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;A NAME="what.6.b"&gt;&lt;b&gt;What coordinate system is used to represent geographic features?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+Horizontal positions are specified in geographic coordinates, that is, latitude and longitude.
+Latitudes are given to the nearest 0.000000.
+Longitudes are given to the nearest 0.000000.
+Latitude and longitude values are specified in Decimal degrees.
+&lt;p&gt;
+The horizontal datum used is D_WGS_1984.&lt;br&gt;
+The ellipsoid used is WGS_1984.&lt;br&gt;
+The semi-major axis of the ellipsoid used is 6378137.000000.&lt;br&gt;
+The flattening of the ellipsoid used is 1/298.257224.&lt;br&gt;
+&lt;p&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;A NAME="what.7"&gt;&lt;b&gt;How does the data set describe geographic features?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;dl&gt;
+&lt;dt&gt;&lt;b&gt;&lt;tt&gt;ke_srtm.vat&lt;/tt&gt;&lt;/b&gt;&lt;dd&gt;&lt;p&gt;
+&lt;dl&gt;
+&lt;dt&gt;&lt;b&gt;&lt;tt&gt;Count&lt;/tt&gt;&lt;/b&gt;&lt;dd&gt;&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;dt&gt;&lt;b&gt;&lt;tt&gt;Rowid&lt;/tt&gt;&lt;/b&gt;&lt;dd&gt;Internal feature number.
+(Source: ESRI)&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;em&gt;Sequential unique whole numbers that are automatically generated.&lt;/em&gt;
+&lt;p&gt;
+&lt;dt&gt;&lt;b&gt;&lt;tt&gt;VALUE&lt;/tt&gt;&lt;/b&gt;&lt;dd&gt;&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;dt&gt;&lt;b&gt;&lt;tt&gt;Value&lt;/tt&gt;&lt;/b&gt;&lt;dd&gt;&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;dt&gt;&lt;b&gt;&lt;tt&gt;COUNT&lt;/tt&gt;&lt;/b&gt;&lt;dd&gt;&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;/dl&gt;
+&lt;p&gt;
+&lt;/dl&gt;
+&lt;p&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+&lt;hr&gt;
+&lt;h3&gt;&lt;A NAME="who"&gt;Who produced the data set?&lt;/A&gt;&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;A NAME="who.1"&gt;&lt;b&gt;Who are the originators of the data set?&lt;/b&gt;&lt;/A&gt; (may include formal authors, digital compilers, and editors)&lt;p&gt;
+&lt;ul&gt;
+&lt;li&gt;NASA, NIMA, DLR, and ASI
+&lt;/ul&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;A NAME="who.2"&gt;&lt;b&gt;Who also contributed to the data set?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;A NAME="who.3"&gt;&lt;b&gt;To whom should users address questions about the data?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+&lt;hr&gt;
+&lt;h3&gt;&lt;A NAME="why"&gt;Why was the data set created?&lt;/A&gt;&lt;/h3&gt;
+&lt;blockquote&gt;
+The objective of the SRTM mission is to obtain elevation radar data on a near-global scale and generate the most complete high-resolution digital topographic database of the Earth. The information collected by SRTM will be used to provide a tool to enhance the activities of scientists, the military, commercial, and civilian users.
+&lt;/blockquote&gt;
+&lt;p&gt;
+&lt;hr&gt;
+&lt;h3&gt;&lt;A NAME="how"&gt;How was the data set created?&lt;/A&gt;&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;A NAME="how.1"&gt;&lt;b&gt;From what previous works were the data drawn?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;li&gt;&lt;A NAME="how.2"&gt;&lt;b&gt;How were the data generated, processed, and modified?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;dl&gt;
+&lt;dt&gt; (process 1 of 2)
+&lt;dd&gt;
+Dataset copied.
+&lt;p&gt;
+Data sources used in this process:
+&lt;ul&gt;
+&lt;li&gt;C:\Documents and Settings\flandsberg\My Documents\Kenya_temp\Derived_data\DEM\Kenya\ke_srtm
+&lt;/ul&gt;
+&lt;p&gt;
+&lt;dt&gt; (process 2 of 2)
+&lt;dd&gt;
+Dataset copied.
+&lt;p&gt;
+Data sources used in this process:
+&lt;ul&gt;
+&lt;li&gt;M:\Working\Poverty_mapping_East_Africa\Map_files_posters_NEW\Ch8-Tana\GIS\data\ke_srtm
+&lt;/ul&gt;
+&lt;p&gt;
+&lt;/dl&gt;
+&lt;li&gt;&lt;A NAME="how.3"&gt;&lt;b&gt;What similar or related data should the user be aware of?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+&lt;hr&gt;
+&lt;h3&gt;&lt;A NAME="quality"&gt;How reliable are the data; what problems remain in the data set?&lt;/A&gt;&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;A NAME="quality.1"&gt;&lt;b&gt;How well have the observations been checked?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;A NAME="quality.2"&gt;&lt;b&gt;How accurate are the geographic locations?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+The mission objective is to produce digital topographic map products with &amp;lt;=20 m absolute horizontal circular accuracy. All accuracies are quoted at the 90% level, consistent with National Map Accuracy Standards.
+&lt;p&gt;
+&lt;li&gt;&lt;A NAME="quality.3"&gt;&lt;b&gt;How accurate are the heights or depths?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+The mission objective is to produce digital topographic map products with &amp;lt;=16 m absolute vertical height accuracy and &amp;lt;= 10 m relative vertical height accuracy. All accuracies are quoted at the 90% level, consistent with National Map Accuracy Standards.
+&lt;p&gt;
+&lt;li&gt;&lt;A NAME="quality.4"&gt;&lt;b&gt;Where are the gaps in the data?  What is missing?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;A NAME="quality.5"&gt;&lt;b&gt;How consistent are the relationships among the observations, including topology?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+&lt;hr&gt;
+&lt;h3&gt;&lt;A NAME="getacopy"&gt;How can someone get a copy of the data set?&lt;/A&gt;&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;A name="getacopy.0"&gt;&lt;b&gt;Are there legal restrictions on access or use of the data?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;blockquote&gt;
+&lt;dl&gt;
+&lt;dt&gt;&lt;em&gt;Access_Constraints:&lt;/em&gt;  None&lt;/dt&gt;
+&lt;dt&gt;&lt;em&gt;Use_Constraints:&lt;/em&gt;
+&lt;dd&gt;
+
+None. Acknowledgement of the originating agencies would be appreciated in products derived from these data.
+
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;A NAME="getacopy.1"&gt;&lt;b&gt;Who distributes the data set?&lt;/b&gt;&lt;/A&gt; (Distributor 1 of 1)&lt;p&gt;
+&lt;div style="margin-left: 2em"&gt;
+Customer Services Representative&lt;br&gt;
+EROS Data Center&lt;br&gt;
+U.S. Geological Survey EROS Data Center&lt;br&gt;
+Sioux Falls, SD 57198&lt;br&gt;
+USA&lt;br&gt;
+&lt;p&gt;
+605-594-6151 (voice)&lt;br&gt;
+605-594-6589 (FAX)&lt;br&gt;
+custserv@usgs.gov&lt;br&gt;
+&lt;/div&gt;
+&lt;li&gt;&lt;A name="getacopy.2"&gt;&lt;b&gt;What's the catalog number I need to order this data set?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;tt&gt;Downloadable Data&lt;/tt&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;A name="getacopy.3"&gt;&lt;b&gt;What legal disclaimers am I supposed to read?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;blockquote&gt;
+Although these data have been processed successfully on a computer system at the U.S. Geological Survey, EROS Data Center, no warranty expressed or implied is made by either regarding the utility of the data on any system, nor shall the act of distribution constitute any such warranty. The USGS will warrant the delivery of this product in computer-readable format and will offer appropriate adjustment of credit when the product is determined unreadable by correctly adjusted computer peripherals, or when the physical medium is delivered in damaged condition. Requests for adjustments of credit must be made within 90 days from the date of this shipment from the ordering site.
+&lt;/blockquote&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;A name="getacopy.4"&gt;&lt;b&gt;How can I download or order the data?&lt;/b&gt;&lt;/A&gt;&lt;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;b&gt;Availability in digital form:&lt;/b&gt;&lt;p&gt;
+&lt;table border="0" cellpadding="2"&gt;
+&lt;tr&gt;&lt;th align="left" valign="top"&gt;Data&amp;nbsp;format:&lt;/th&gt;
+&lt;td&gt;
+
+Size: 88.839
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;p&gt;
+&lt;li&gt;&lt;b&gt;Cost to order the data:&lt;/b&gt; &lt;/ul&gt;
+&lt;p&gt;
+&lt;/ol&gt;
+&lt;p&gt;
+&lt;hr&gt;
+&lt;h3&gt;&lt;A NAME="metaref"&gt;Who wrote the metadata?&lt;/A&gt;&lt;/h3&gt;
+&lt;dl&gt;
+&lt;dt&gt;Dates:
+&lt;dd&gt;Last modified: 12-Sep-2002&lt;br&gt;
+&lt;/dd&gt;
+&lt;dt&gt;Metadata author:
+&lt;dd&gt;
+&lt;div style="margin-left: 2em"&gt;
+Customer Services Representative&lt;br&gt;
+EROS Data Center&lt;br&gt;
+REQUIRED: The city of the address., REQUIRED: The state or province of the address. REQUIRED: The ZIP or other postal code of the address.&lt;br&gt;
+&lt;p&gt;
+605-594-6151 (voice)&lt;br&gt;
+605-594-6589 (FAX)&lt;br&gt;
+&lt;/div&gt;
+&lt;/dd&gt;
+&lt;dt&gt;Metadata standard: &lt;dd&gt;FGDC Content Standards for Digital Geospatial Metadata (FGDC-STD-001-1998)&lt;dt&gt;Metadata extensions used:
+&lt;dd&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;A HREF="http://www.esri.com/metadata/esriprof80.html"&gt;&amp;lt;http://www.esri.com/metadata/esriprof80.html&amp;gt;&lt;/A&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;hr&gt;
+Generated by &lt;A HREF="http://geology.usgs.gov/tools/metadata/tools/doc/mp.html"&gt;&lt;tt&gt;mp&lt;/tt&gt;&lt;/A&gt; version 2.8.6 on Thu Aug 16 11:10:55 2007&lt;br&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+<Esri><CreaDate>20071203</CreaDate><CreaTime>11455200</CreaTime><SyncOnce>FALSE</SyncOnce><SyncDate>20071031</SyncDate><SyncTime>10123700</SyncTime><ModDate>20071031</ModDate><ModTime>10123700</ModTime><DataProperties><lineage><Process Name="DefineProjection_1" ToolSource="C:\Program Files\ArcGIS\ArcToolbox\Toolboxes\Data Management Tools.tbx\DefineProjection" Date="20070816" Time="112148">DefineProjection "C:\Documents and Settings\flandsberg\Desktop\Copy of Metadata\hillshd_90m" GEOGCS['GCS_WGS_1984',DATUM['D_WGS_1984',SPHEROID['WGS_1984',6378137.0,298.257223563]],PRIMEM['Greenwich',0.0],UNIT['Degree',0.0174532925199433]] "C:\Documents and Settings\flandsberg\Desktop\Copy of Metadata\hillshd_90m"</Process></lineage></DataProperties><MetaID>{4F7FCF7A-DE16-4604-8F45-4E2FB4FDB9E6}</MetaID></Esri><dataqual><lineage><procstep><procdesc Sync="TRUE">Metadata imported.</procdesc><srcused Sync="TRUE">C:\DOCUME~1\FLANDS~1\LOCALS~1\Temp\xmlB2.tmp</srcused><date Sync="TRUE">20070816</date><time Sync="TRUE">11111500</time></procstep><procstep><procdesc Sync="TRUE">Dataset copied.</procdesc><srcused Sync="TRUE">C:\Documents and Settings\flandsberg\Desktop\Copy of Metadata\Raster\hillshd_90m</srcused><date Sync="TRUE">20070816</date><time Sync="TRUE">11193000</time></procstep><procstep><procdesc Sync="TRUE">Dataset moved.</procdesc><srcused Sync="TRUE">C:\Documents and Settings\flandsberg\Desktop\Copy of Metadata\hillshd_90m</srcused><date Sync="TRUE">20070816</date><time Sync="TRUE">11270200</time></procstep><procstep><procdesc Sync="TRUE">Dataset copied.</procdesc><srcused Sync="TRUE">M:\Working\Poverty_mapping_East_Africa\Map_files_posters_NEW\Final_products\Data_CD\Data_Nov30\Raster\hillshd_90m</srcused><date Sync="TRUE">20071203</date><time Sync="TRUE">11455200</time></procstep></lineage></dataqual><idinfo><native Sync="TRUE">Microsoft Windows XP Version 5.1 (Build 2600) Service Pack 2; ESRI ArcCatalog 9.2.0.1324</native><descript><langdata Sync="TRUE">en</langdata><abstract>This dataset contains shaded relief surface. These integer values enable the user display a continuous surface of elevation, as opposed to topography which is broken into intervals. This Hillshade was created from the Shuttle Radar Topography Mission (SRTM). </abstract><purpose>The cell values represent illumination value from 0 - 255. Shaded relief surfaces are mainly used as background in mapping and displaying data.</purpose><supplinf>This spatial data set is a derivative product of the Shuttle Radar Topography Mission(SRTM) digital elevation model(DEM) data set. The SRTM DEM has gaps or voided data values through its coverage area. These gaps are a result of a number of causes such as shadowing, phase unwrapping anomalies, or other radar-specific causes[Ref: NASA]. These gaps were filled with existing lower resolution DEM data sets using a SRTM/DEM merge process developed by the United States National Geo-spatial-Intelligence Agency (NGA).</supplinf></descript><citation><citeinfo><origin>U.S. Geological Survey National Center for Earth Resources Observation and Science (EROS) </origin><pubdate>01/22/2005 </pubdate><title>SRTM Shaded Relief </title><ftname Sync="TRUE">hillshd_90m</ftname><geoform Sync="TRUE">raster digital data</geoform><pubinfo><pubplace>Sioux Falls, SD </pubplace><publish>USGS/EROS Data Center </publish></pubinfo><onlink Sync="TRUE">\\WRICSAP029333\GIS\Working\Poverty_mapping_East_Africa\Map_files_posters_NEW\Final_products\Data_CD\Data_Nov30_web\hillshd_90m\hillshd_90m</onlink></citeinfo></citation><timeperd><current>ground condition</current><timeinfo><sngdate><caldate>02/2000</caldate></sngdate></timeinfo></timeperd><status><progress>Complete</progress><update>None planned</update></status><spdom><bounding><westbc Sync="TRUE">33.908859</westbc><eastbc Sync="TRUE">41.911359</eastbc><northbc Sync="TRUE">5.427881</northbc><southbc Sync="TRUE">-4.680452</southbc></bounding><lboundng><leftbc Sync="TRUE">33.908859</leftbc><rightbc Sync="TRUE">41.911359</rightbc><bottombc Sync="TRUE">-4.680452</bottombc><topbc Sync="TRUE">5.427881</topbc></lboundng></spdom><keywords><theme><themekt>None.</themekt><themekey>Hillshade</themekey><themekey>Shuttle Radar Topography Mission </themekey><themekey>Shaded Relief </themekey><themekey>Relief</themekey><themekey>elevation</themekey></theme><place><placekey>Kenya</placekey><placekey>Africa</placekey></place></keywords><accconst>None.</accconst><useconst>None. Acknowledgement of the originating agencies would be appreciated in products derived from these data.</useconst><natvform Sync="TRUE">Raster Dataset</natvform><ptcontac><cntinfo><cntpos>GIS Lab Manager</cntpos><cntaddr><addrtype>mailing and physical address</addrtype><address>10 G Street NE Suite 800</address><city>Washington</city><state>DC</state><postal>20002</postal><country>USA</country></cntaddr><cntvoice>202-729-7600</cntvoice><cntfax>202-729-7686</cntfax><cntorgp><cntorg>World Resources Institute</cntorg></cntorgp></cntinfo></ptcontac></idinfo><dataIdInfo><envirDesc Sync="TRUE">Microsoft Windows XP Version 5.1 (Build 2600) Service Pack 2; ESRI ArcCatalog 9.2.0.1324</envirDesc><dataLang><languageCode Sync="TRUE" value="en"></languageCode></dataLang><idCitation><resTitle Sync="TRUE">hillshd_90m</resTitle><presForm><PresFormCd Sync="TRUE" value="005"></PresFormCd></presForm></idCitation><spatRpType><SpatRepTypCd Sync="TRUE" value="002"></SpatRepTypCd></spatRpType><dataExt><geoEle><GeoBndBox esriExtentType="native"><westBL Sync="TRUE">33.908859</westBL><eastBL Sync="TRUE">41.911359</eastBL><northBL Sync="TRUE">5.427881</northBL><southBL Sync="TRUE">-4.680452</southBL><exTypeCode Sync="TRUE">1</exTypeCode></GeoBndBox></geoEle></dataExt><geoBox esriExtentType="decdegrees"><westBL Sync="TRUE">33.908859</westBL><eastBL Sync="TRUE">41.911359</eastBL><northBL Sync="TRUE">5.427881</northBL><southBL Sync="TRUE">-4.680452</southBL><exTypeCode Sync="TRUE">1</exTypeCode></geoBox></dataIdInfo><metainfo><langmeta Sync="TRUE">en</langmeta><metstdn Sync="TRUE">FGDC Content Standards for Digital Geospatial Metadata</metstdn><metstdv Sync="TRUE">FGDC-STD-001-1998</metstdv><mettc Sync="TRUE">local time</mettc><metc><cntinfo><cntorgp><cntorg>World Resources Institute</cntorg></cntorgp><cntaddr><addrtype>mailing and physical address</addrtype><city>Washington</city><state>DC</state><postal>20002</postal><address>10 G Street NE Suite 800</address><country>USA</country></cntaddr><cntvoice>202-729-7600</cntvoice><cntpos>GIS Lab Manager</cntpos><cntfax>202-729-7686</cntfax></cntinfo></metc><metd Sync="TRUE">20071031</metd><metextns><onlink Sync="TRUE">http://www.esri.com/metadata/esriprof80.html</onlink><metprof Sync="TRUE">ESRI Metadata Profile</metprof></metextns></metainfo><mdLang><languageCode Sync="TRUE" value="en"></languageCode></mdLang><mdStanName Sync="TRUE">ISO 19115 Geographic Information - Metadata</mdStanName><mdStanVer Sync="TRUE">DIS_ESRI1.0</mdStanVer><mdChar><CharSetCd Sync="TRUE" value="004"></CharSetCd></mdChar><mdHrLv><ScopeCd Sync="TRUE" value="005"></ScopeCd></mdHrLv><mdHrLvName Sync="TRUE">dataset</mdHrLvName><distInfo><distributor><distorTran><onLineSrc><linkage Sync="TRUE">file://\\WRICSAP029333\GIS\Working\Poverty_mapping_East_Africa\Map_files_posters_NEW\Final_products\Data_CD\Data_Nov30_web\hillshd_90m\hillshd_90m</linkage><protocol Sync="TRUE">Local Area Network</protocol><orDesc Sync="TRUE">002</orDesc></onLineSrc><transSize Sync="TRUE">62.661</transSize></distorTran><distorFormat><formatName Sync="TRUE">Raster Dataset</formatName></distorFormat></distributor></distInfo><distinfo><resdesc Sync="TRUE">Downloadable Data</resdesc><stdorder><digform><digtinfo><transize Sync="TRUE">62.661</transize><dssize Sync="TRUE">62.661</dssize></digtinfo></digform></stdorder><distrib><cntinfo><cntorgp/></cntinfo></distrib></distinfo><spdoinfo><direct Sync="TRUE">Raster</direct><rastinfo><rasttype Sync="TRUE">Grid Cell</rasttype><rowcount Sync="TRUE">12130</rowcount><colcount Sync="TRUE">9603</colcount><rastxsz Sync="TRUE">0.000833</rastxsz><rastysz Sync="TRUE">0.000833</rastysz><rastbpp Sync="TRUE">16</rastbpp><vrtcount Sync="TRUE">1</vrtcount><rastorig Sync="TRUE">Upper Left</rastorig><rastcmap Sync="TRUE">FALSE</rastcmap><rastcomp Sync="TRUE">Default</rastcomp><rastband Sync="TRUE">1</rastband><rastdtyp Sync="TRUE">matrix values</rastdtyp><rastplyr Sync="TRUE">TRUE</rastplyr><rastifor Sync="TRUE"></rastifor></rastinfo></spdoinfo><spatRepInfo><GridSpatRep><numDims Sync="TRUE">2</numDims><cellGeo><CellGeoCd Sync="TRUE" value="002"></CellGeoCd></cellGeo><tranParaAv Sync="TRUE">1</tranParaAv><axDimProps><Dimen><dimName><DimNameTypCd Sync="TRUE" value="002"></DimNameTypCd></dimName><dimSize Sync="TRUE">9603</dimSize><dimResol><value Sync="TRUE">0.000833</value><uom><UomLength><uomName Sync="TRUE">Degree</uomName></UomLength></uom></dimResol></Dimen><Dimen><dimName><DimNameTypCd Sync="TRUE" value="001"></DimNameTypCd></dimName><dimSize Sync="TRUE">12130</dimSize><dimResol><value Sync="TRUE">0.000833</value><uom><UomLength><uomName Sync="TRUE">Degree</uomName></UomLength></uom></dimResol></Dimen></axDimProps></GridSpatRep></spatRepInfo><spref><horizsys><cordsysn><geogcsn Sync="TRUE">GCS_WGS_1984</geogcsn></cordsysn><geograph><geogunit Sync="TRUE">Decimal degrees</geogunit><latres Sync="TRUE">0.000000</latres><longres Sync="TRUE">0.000000</longres></geograph><geodetic><horizdn Sync="TRUE">D_WGS_1984</horizdn><ellips Sync="TRUE">WGS_1984</ellips><semiaxis Sync="TRUE">6378137.000000</semiaxis><denflat Sync="TRUE">298.257224</denflat></geodetic><planar><planci><plance Sync="TRUE">row and column</plance><coordrep><absres Sync="TRUE">0.000833</absres><ordres Sync="TRUE">0.000833</ordres></coordrep></planci></planar></horizsys></spref><eainfo><detailed Name="hillshd_90m.vat"><enttyp><enttypl Sync="TRUE">hillshd_90m.vat</enttypl><enttypt Sync="TRUE">Table</enttypt><enttypc Sync="TRUE">182</enttypc></enttyp><attr><attrlabl Sync="TRUE">Rowid</attrlabl><attalias Sync="TRUE">Rowid</attalias><attrtype Sync="TRUE">OID</attrtype><attwidth Sync="TRUE">4</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale><attrdef Sync="TRUE">Internal feature number.</attrdef><attrdefs Sync="TRUE">ESRI</attrdefs><attrdomv><udom Sync="TRUE">Sequential unique whole numbers that are automatically generated.</udom></attrdomv></attr><attr><attrlabl Sync="TRUE">VALUE</attrlabl><attalias Sync="TRUE">VALUE</attalias><attrtype Sync="TRUE">Integer</attrtype><attwidth Sync="TRUE">4</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale><attrdef>Illumination value (0 - 255)</attrdef></attr><attr><attrlabl Sync="TRUE">COUNT</attrlabl><attalias Sync="TRUE">COUNT</attalias><attrtype Sync="TRUE">Integer</attrtype><attwidth Sync="TRUE">4</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale></attr></detailed></eainfo><mdDateSt Sync="TRUE">20071031</mdDateSt><refSysInfo><RefSystem><refSysID><identCode Sync="TRUE">GCS_WGS_1984</identCode></refSysID></RefSystem></refSysInfo></metadata>

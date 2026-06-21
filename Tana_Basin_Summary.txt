@@ -1,0 +1,32 @@
+======================================================================
+TANA RIVER BASIN - STUDY AREA SUMMARY
+======================================================================
+
+COUNTRY & ADMINISTRATIVE BOUNDARIES:
+  Country: Kenya
+  Number of Counties: 300
+
+WATER BASINS:
+  Total basins: 215
+
+GAUGING STATIONS (3):
+  • Garsen (4G02)
+    Coordinates: (-2.2683, 40.1264)
+    Decimal DMS: 2°16'06"S, 40°07'35"E
+  • Galole (Hola)
+    Coordinates: (-1.5000, 40.0333)
+    Decimal DMS: 1°30'00"S, 40°02'00"E
+  • Bura
+    Coordinates: (-1.1948, 39.8902)
+    Decimal DMS: 1°11'41"S, 39°53'25"E
+
+BASIN EXTENT:
+  Latitude: -2.5°S to -0.8°S
+  Longitude: 39.7°E to 40.3°E
+
+MAPS GENERATED:
+  1. Tana_Basin_Map_Static.png - Static map with basins and stations
+  2. Tana_Basin_Elevation_Map.png - Map with elevation/hillshade
+  3. Tana_Basin_Map_Interactive.html - Interactive Folium map
+
+======================================================================

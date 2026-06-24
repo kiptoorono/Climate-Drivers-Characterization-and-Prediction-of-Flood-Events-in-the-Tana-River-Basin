@@ -10,6 +10,7 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 warnings.filterwarnings('ignore')
 
 # ===== CONFIGURATION =====
+
 EXCEL_FILE = 'TanaRiver Flow.xlsx'
 SHEET_NAME = 'Rawdata'
 WINDOW_SIZE = 14
@@ -21,9 +22,14 @@ THRESHOLDS = {
 }
 
 STATIONS = ['Bura', 'Galole', 'Garsen']
-OUTPUT_FILE = 'Flood_Analysis_Results.xlsx'
+OUTPUT_FILE = 'Flood_Analysis_Results_Seasonality.xlsx'
+
+# Kenya's Bimodal Rainfall Seasonality
+LONG_RAINS = [4, 5, 6]        # April, May, June
+SHORT_RAINS = [10, 11, 12]    # October, November, December
 
 # ===== FORMATTING UTILITIES =====
+
 def format_header_row(ws, row_num, num_cols):
     """Format header row with styling"""
     header_fill = PatternFill(start_color="1F4E78", end_color="1F4E78", fill_type="solid")
@@ -34,7 +40,6 @@ def format_header_row(ws, row_num, num_cols):
         top=Side(style='thin'),
         bottom=Side(style='thin')
     )
-    
     for col in range(1, num_cols + 1):
         cell = ws.cell(row=row_num, column=col)
         cell.fill = header_fill
@@ -50,7 +55,6 @@ def format_data_cells(ws, start_row, end_row, num_cols):
         top=Side(style='thin'),
         bottom=Side(style='thin')
     )
-    
     for row in range(start_row, end_row + 1):
         for col in range(1, num_cols + 1):
             cell = ws.cell(row=row, column=col)
@@ -58,7 +62,19 @@ def format_data_cells(ws, start_row, end_row, num_cols):
             if col > 1:
                 cell.alignment = Alignment(horizontal='right', vertical='center')
 
+# ===== SEASONALITY CLASSIFICATION =====
+
+def classify_season(month):
+    """Classify month into season: Long Rains, Short Rains, or Dry"""
+    if month in LONG_RAINS:
+        return 'Long Rains (Apr-Jun)'
+    elif month in SHORT_RAINS:
+        return 'Short Rains (Oct-Dec)'
+    else:
+        return 'Dry Season'
+
 # ===== YEAR-AWARE ROLLING MAX =====
+
 def year_aware_rolling_max(series, dates, year_col, window=14):
     """Calculate 14-day rolling max that respects year boundaries."""
     result = []
@@ -85,6 +101,7 @@ def year_aware_rolling_max(series, dates, year_col, window=14):
     return result
 
 # ===== IDENTIFY FLOOD EVENTS =====
+
 def identify_flood_events(rolling_max_series, threshold):
     """Identify flood events: start when rolling_max > threshold, end when <= threshold."""
     event_numbers = []
@@ -108,6 +125,7 @@ def identify_flood_events(rolling_max_series, threshold):
     return event_numbers
 
 # ===== MARK EVENT DATES =====
+
 def mark_event_dates(event_numbers, dates):
     """Mark event start/end dates and duration."""
     start_dates = [None] * len(event_numbers)
@@ -142,6 +160,7 @@ def mark_event_dates(event_numbers, dates):
     return start_dates, end_dates, durations
 
 # ===== CALCULATE EVENT BLOCK MAX =====
+
 def calculate_event_block_max(event_numbers, rolling_values):
     """Record highest rolling window value at event end date."""
     event_block_max = [None] * len(event_numbers)
@@ -163,9 +182,10 @@ def calculate_event_block_max(event_numbers, rolling_values):
     return event_block_max
 
 # ===== LOAD & PREPARE DATA =====
-print("=" * 80)
-print("FLOOD EVENT ANALYSIS - EXCEL EXPORT")
-print("=" * 80)
+
+print("=" * 90)
+print("FLOOD EVENT ANALYSIS WITH BIMODAL SEASONALITY - EXCEL EXPORT")
+print("=" * 90)
 print("\\n[STEP 1] Loading data...")
 
 raw_data = pd.read_excel(EXCEL_FILE, sheet_name=SHEET_NAME, header=1, usecols=[0, 1, 2, 3])
@@ -177,6 +197,7 @@ for col in STATIONS:
 
 raw_data['year'] = raw_data['date'].dt.year
 raw_data['month'] = raw_data['date'].dt.month
+raw_data['season'] = raw_data['month'].apply(classify_season)
 raw_data = raw_data.dropna(subset=['date']).reset_index(drop=True)
 
 print(f"✓ Data loaded: {raw_data['date'].min()} to {raw_data['date'].max()}")
@@ -184,6 +205,7 @@ print(f"✓ Total records: {len(raw_data)}")
 print(f"✓ Years covered: {raw_data['year'].min()} to {raw_data['year'].max()}")
 
 # ===== PROCESS EACH STATION =====
+
 results = {}
 
 for station in STATIONS:
@@ -207,15 +229,48 @@ for station in STATIONS:
     
     print(f"✓ {station}: {len([e for e in events if e > 0])} events identified")
 
+# ===== CREATE EVENT DATAFRAMES WITH SEASONALITY =====
+
+for station in STATIONS:
+    events = results[station]['events']
+    durations = results[station]['durations']
+    block_max = results[station]['block_max']
+    start_dates = results[station]['start_dates']
+    
+    # Map event number to its start date since start_dates is only populated at the event's start index
+    event_start_dates = {}
+    for idx, event_num in enumerate(events):
+        if event_num > 0 and start_dates[idx] is not None:
+            event_start_dates[event_num] = start_dates[idx]
+            
+    event_data_list = []
+    for idx, event_num in enumerate(events):
+        if event_num > 0 and durations[idx] is not None:
+            start_date = event_start_dates.get(event_num, None)
+            event_data_list.append({
+                'event_num': event_num,
+                'start_date': start_date,
+                'year': start_date.year if start_date else raw_data['year'].iloc[idx],
+                'month': start_date.month if start_date else None,
+                'season': classify_season(start_date.month) if start_date else None,
+                'duration': durations[idx],
+                'peak': block_max[idx]
+            })
+    
+    event_df = pd.DataFrame(event_data_list).drop_duplicates(subset=['event_num'])
+    results[station]['event_df'] = event_df
+
 # ===== CREATE EXCEL WORKBOOK =====
+
 print(f"\\n[STEP 3] Creating Excel file: {OUTPUT_FILE}...")
 wb = Workbook()
 wb.remove(wb.active)
 
 # ===== SHEET 1: EVENT FREQUENCY ANALYSIS =====
-ws1 = wb.create_sheet("1. Event Frequency")
 
+ws1 = wb.create_sheet("1. Event Frequency")
 row = 1
+
 ws1.cell(row=row, column=1).value = "ANALYSIS 1: EVENT FREQUENCY & CHARACTERIZATION"
 ws1.cell(row=row, column=1).font = Font(bold=True, size=12, color="FFFFFF")
 ws1.cell(row=row, column=1).fill = PatternFill(start_color="203864", end_color="203864", fill_type="solid")
@@ -223,23 +278,8 @@ ws1.merge_cells(f'A{row}:F{row}')
 row += 2
 
 for station in STATIONS:
-    events = results[station]['events']
-    durations = results[station]['durations']
-    block_max = results[station]['block_max']
+    event_df = results[station]['event_df']
     threshold = results[station]['threshold']
-    
-    event_data_list = []
-    for idx, event_num in enumerate(events):
-        if event_num > 0 and durations[idx] is not None:
-            event_data_list.append({
-                'event_num': event_num,
-                'year': raw_data['year'].iloc[idx],
-                'duration': durations[idx],
-                'peak': block_max[idx]
-            })
-    
-    event_df = pd.DataFrame(event_data_list).drop_duplicates(subset=['event_num'])
-    results[station]['event_df'] = event_df
     
     ws1.cell(row=row, column=1).value = f"{station.upper()} STATION"
     ws1.cell(row=row, column=1).font = Font(bold=True, size=11, color="FFFFFF")
@@ -277,6 +317,7 @@ ws1.column_dimensions['A'].width = 30
 ws1.column_dimensions['B'].width = 20
 
 # ===== SHEET 2: DECADE TREND ANALYSIS =====
+
 ws2 = wb.create_sheet("2. Decade Trends")
 row = 1
 
@@ -326,7 +367,8 @@ ws2.column_dimensions['B'].width = 15
 ws2.column_dimensions['C'].width = 20
 ws2.column_dimensions['D'].width = 18
 
-# ===== SHEET 3: SEASONALITY =====
+# ===== SHEET 3: SEASONALITY (ENHANCED) =====
+
 ws3 = wb.create_sheet("3. Seasonality")
 row = 1
 
@@ -337,7 +379,7 @@ ws3.merge_cells(f'A{row}:C{row}')
 row += 2
 
 month_names = {1:'January', 2:'February', 3:'March', 4:'April', 5:'May', 6:'June',
-               7:'July', 8:'August', 9:'September', 10:'October', 11:'November', 12:'December'}
+    7:'July', 8:'August', 9:'September', 10:'October', 11:'November', 12:'December'}
 
 for station in STATIONS:
     events = results[station]['events']
@@ -379,6 +421,7 @@ ws3.column_dimensions['A'].width = 15
 ws3.column_dimensions['B'].width = 15
 
 # ===== SHEET 4: SPATIAL COMPARISON =====
+
 ws4 = wb.create_sheet("4. Spatial Comparison")
 row = 1
 
@@ -428,9 +471,9 @@ row += 1
 correlation_data = []
 for i, st1 in enumerate(STATIONS):
     for st2 in STATIONS[i+1:]:
-        valid_indices = [(idx, results[st1]['block_max'][idx], results[st2]['block_max'][idx]) 
-                         for idx in range(len(results[st1]['block_max'])) 
-                         if results[st1]['block_max'][idx] is not None and results[st2]['block_max'][idx] is not None]
+        valid_indices = [(idx, results[st1]['block_max'][idx], results[st2]['block_max'][idx])
+            for idx in range(len(results[st1]['block_max']))
+            if results[st1]['block_max'][idx] is not None and results[st2]['block_max'][idx] is not None]
         
         if len(valid_indices) > 1:
             p1 = [x[1] for x in valid_indices]
@@ -452,7 +495,8 @@ for idx, r in corr_df.iterrows():
 for col in ['A', 'B', 'C', 'D', 'E', 'F', 'G']:
     ws4.column_dimensions[col].width = 18
 
-# ===== SHEET 5: ANNUAL & POT ANALYSIS =====
+# ===== SHEET 5: ANNUAL & POT =====
+
 ws5 = wb.create_sheet("5. Annual & POT")
 row = 1
 
@@ -464,7 +508,6 @@ row += 2
 
 for station in STATIONS:
     event_df = results[station]['event_df']
-    
     annual_max = event_df.groupby('year')['peak'].max()
     all_peaks = event_df['peak'].values
     
@@ -494,13 +537,362 @@ for station in STATIONS:
 ws5.column_dimensions['A'].width = 30
 ws5.column_dimensions['B'].width = 20
 
+# ========== NEW SHEETS: SEASONAL ANALYSIS ==========
+
+# ===== SHEET 6: LONG RAINS ANALYSIS =====
+
+ws6 = wb.create_sheet("6. Long Rains")
+row = 1
+
+ws6.cell(row=row, column=1).value = "ANALYSIS 6: LONG RAINS FLOODING (April-June)"
+ws6.cell(row=row, column=1).font = Font(bold=True, size=12, color="FFFFFF")
+ws6.cell(row=row, column=1).fill = PatternFill(start_color="203864", end_color="203864", fill_type="solid")
+ws6.merge_cells(f'A{row}:G{row}')
+row += 2
+
+for station in STATIONS:
+    event_df = results[station]['event_df']
+    long_rains_events = event_df[event_df['season'] == 'Long Rains (Apr-Jun)']
+    
+    ws6.cell(row=row, column=1).value = f"{station.upper()}"
+    ws6.cell(row=row, column=1).font = Font(bold=True, size=11, color="FFFFFF")
+    ws6.cell(row=row, column=1).fill = PatternFill(start_color="70AD47", end_color="70AD47", fill_type="solid")
+    ws6.merge_cells(f'A{row}:G{row}')
+    row += 1
+    
+    if len(long_rains_events) > 0:
+        metrics = {
+            'Events in Long Rains': len(long_rains_events),
+            'Percentage of Annual Events': f"{(len(long_rains_events) / len(event_df) * 100):.1f}%",
+            'Mean Duration (days)': f"{long_rains_events['duration'].mean():.2f}",
+            'Median Duration (days)': f"{long_rains_events['duration'].median():.2f}",
+            'Mean Peak Level': f"{long_rains_events['peak'].mean():.2f}",
+            'Median Peak Level': f"{long_rains_events['peak'].median():.2f}",
+            'Max Peak Level': f"{long_rains_events['peak'].max():.2f}",
+            'Min Peak Level': f"{long_rains_events['peak'].min():.2f}",
+            'Std Dev Peak': f"{long_rains_events['peak'].std():.2f}"
+        }
+    else:
+        metrics = {
+            'Events in Long Rains': 0,
+            'Percentage of Annual Events': '0%',
+            'No flooding events detected in this season': ''
+        }
+    
+    for key, value in metrics.items():
+        ws6.cell(row=row, column=1).value = key
+        ws6.cell(row=row, column=2).value = value
+        row += 1
+    
+    row += 2
+
+ws6.column_dimensions['A'].width = 35
+ws6.column_dimensions['B'].width = 20
+
+# ===== SHEET 7: SHORT RAINS ANALYSIS =====
+
+ws7 = wb.create_sheet("7. Short Rains")
+row = 1
+
+ws7.cell(row=row, column=1).value = "ANALYSIS 7: SHORT RAINS FLOODING (October-December)"
+ws7.cell(row=row, column=1).font = Font(bold=True, size=12, color="FFFFFF")
+ws7.cell(row=row, column=1).fill = PatternFill(start_color="203864", end_color="203864", fill_type="solid")
+ws7.merge_cells(f'A{row}:G{row}')
+row += 2
+
+for station in STATIONS:
+    event_df = results[station]['event_df']
+    short_rains_events = event_df[event_df['season'] == 'Short Rains (Oct-Dec)']
+    
+    ws7.cell(row=row, column=1).value = f"{station.upper()}"
+    ws7.cell(row=row, column=1).font = Font(bold=True, size=11, color="FFFFFF")
+    ws7.cell(row=row, column=1).fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
+    ws7.merge_cells(f'A{row}:G{row}')
+    row += 1
+    
+    if len(short_rains_events) > 0:
+        metrics = {
+            'Events in Short Rains': len(short_rains_events),
+            'Percentage of Annual Events': f"{(len(short_rains_events) / len(event_df) * 100):.1f}%",
+            'Mean Duration (days)': f"{short_rains_events['duration'].mean():.2f}",
+            'Median Duration (days)': f"{short_rains_events['duration'].median():.2f}",
+            'Mean Peak Level': f"{short_rains_events['peak'].mean():.2f}",
+            'Median Peak Level': f"{short_rains_events['peak'].median():.2f}",
+            'Max Peak Level': f"{short_rains_events['peak'].max():.2f}",
+            'Min Peak Level': f"{short_rains_events['peak'].min():.2f}",
+            'Std Dev Peak': f"{short_rains_events['peak'].std():.2f}"
+        }
+    else:
+        metrics = {
+            'Events in Short Rains': 0,
+            'Percentage of Annual Events': '0%',
+            'No flooding events detected in this season': ''
+        }
+    
+    for key, value in metrics.items():
+        ws7.cell(row=row, column=1).value = key
+        ws7.cell(row=row, column=2).value = value
+        row += 1
+    
+    row += 2
+
+ws7.column_dimensions['A'].width = 35
+ws7.column_dimensions['B'].width = 20
+
+# ===== SHEET 8: SEASONAL COMPARISON =====
+
+ws8 = wb.create_sheet("8. Seasonal Comparison")
+row = 1
+
+ws8.cell(row=row, column=1).value = "ANALYSIS 8: SEASONAL COMPARISON - Which Season Drives Flooding?"
+ws8.cell(row=row, column=1).font = Font(bold=True, size=12, color="FFFFFF")
+ws8.cell(row=row, column=1).fill = PatternFill(start_color="203864", end_color="203864", fill_type="solid")
+ws8.merge_cells(f'A{row}:I{row}')
+row += 2
+
+for station in STATIONS:
+    event_df = results[station]['event_df']
+    long_rains = event_df[event_df['season'] == 'Long Rains (Apr-Jun)']
+    short_rains = event_df[event_df['season'] == 'Short Rains (Oct-Dec)']
+    dry_season = event_df[event_df['season'] == 'Dry Season']
+    
+    ws8.cell(row=row, column=1).value = f"{station.upper()}"
+    ws8.cell(row=row, column=1).font = Font(bold=True, size=11, color="FFFFFF")
+    ws8.cell(row=row, column=1).fill = PatternFill(start_color="203864", end_color="203864", fill_type="solid")
+    ws8.merge_cells(f'A{row}:I{row}')
+    row += 1
+    
+    ws8.cell(row=row, column=1).value = 'Season'
+    ws8.cell(row=row, column=2).value = 'Event Count'
+    ws8.cell(row=row, column=3).value = '% of Total'
+    ws8.cell(row=row, column=4).value = 'Mean Duration'
+    ws8.cell(row=row, column=5).value = 'Median Duration'
+    ws8.cell(row=row, column=6).value = 'Mean Peak'
+    ws8.cell(row=row, column=7).value = 'Median Peak'
+    ws8.cell(row=row, column=8).value = 'Max Peak'
+    ws8.cell(row=row, column=9).value = 'Intensity (Peak-Threshold)'
+    format_header_row(ws8, row, 9)
+    row += 1
+    
+    threshold = results[station]['threshold']
+    total_events = len(event_df)
+    
+    seasons_data = [
+        ('Long Rains (Apr-Jun)', long_rains),
+        ('Short Rains (Oct-Dec)', short_rains),
+        ('Dry Season', dry_season)
+    ]
+    
+    for season_name, season_df in seasons_data:
+        ws8.cell(row=row, column=1).value = season_name
+        ws8.cell(row=row, column=2).value = len(season_df)
+        if total_events > 0:
+            ws8.cell(row=row, column=3).value = f"{(len(season_df) / total_events * 100):.1f}%"
+        else:
+            ws8.cell(row=row, column=3).value = "0%"
+        
+        if len(season_df) > 0:
+            ws8.cell(row=row, column=4).value = f"{season_df['duration'].mean():.2f}"
+            ws8.cell(row=row, column=5).value = f"{season_df['duration'].median():.2f}"
+            ws8.cell(row=row, column=6).value = f"{season_df['peak'].mean():.2f}"
+            ws8.cell(row=row, column=7).value = f"{season_df['peak'].median():.2f}"
+            ws8.cell(row=row, column=8).value = f"{season_df['peak'].max():.2f}"
+            ws8.cell(row=row, column=9).value = f"{(season_df['peak'].mean() - threshold):.2f}"
+        else:
+            ws8.cell(row=row, column=4).value = "N/A"
+            ws8.cell(row=row, column=5).value = "N/A"
+            ws8.cell(row=row, column=6).value = "N/A"
+            ws8.cell(row=row, column=7).value = "N/A"
+            ws8.cell(row=row, column=8).value = "N/A"
+            ws8.cell(row=row, column=9).value = "N/A"
+        
+        row += 1
+    
+    row += 2
+
+for col in range(1, 10):
+    ws8.column_dimensions[chr(64 + col)].width = 16
+
+# ===== SHEET 9: CROSS-SEASONAL CORRELATION =====
+
+ws9 = wb.create_sheet("9. Cross-Seasonal Correlation")
+row = 1
+
+ws9.cell(row=row, column=1).value = "ANALYSIS 9: CROSS-SEASONAL CORRELATION"
+ws9.cell(row=row, column=1).font = Font(bold=True, size=12, color="FFFFFF")
+ws9.cell(row=row, column=1).fill = PatternFill(start_color="203864", end_color="203864", fill_type="solid")
+ws9.merge_cells(f'A{row}:E{row}')
+row += 2
+
+ws9.cell(row=row, column=1).value = "Analysis: How do long rains and short rains affect each other?"
+ws9.cell(row=row, column=1).font = Font(italic=True, size=10)
+ws9.merge_cells(f'A{row}:E{row}')
+row += 2
+
+for station in STATIONS:
+    event_df = results[station]['event_df'].copy()
+    
+    ws9.cell(row=row, column=1).value = f"{station.upper()}"
+    ws9.cell(row=row, column=1).font = Font(bold=True, size=11, color="FFFFFF")
+    ws9.cell(row=row, column=1).fill = PatternFill(start_color="C55A11", end_color="C55A11", fill_type="solid")
+    ws9.merge_cells(f'A{row}:E{row}')
+    row += 1
+    
+    # Aggregate peaks by season and year
+    seasonal_yearly = event_df.groupby(['year', 'season'])['peak'].max().reset_index()
+    
+    long_rains_yearly = seasonal_yearly[seasonal_yearly['season'] == 'Long Rains (Apr-Jun)'].set_index('year')['peak']
+    short_rains_yearly = seasonal_yearly[seasonal_yearly['season'] == 'Short Rains (Oct-Dec)'].set_index('year')['peak']
+    
+    # Align years
+    common_years = long_rains_yearly.index.intersection(short_rains_yearly.index)
+    
+    if len(common_years) > 1:
+        lr_peaks = long_rains_yearly.loc[common_years].values
+        sr_peaks = short_rains_yearly.loc[common_years].values
+        
+        # Correlation
+        corr, pval = stats.pearsonr(lr_peaks, sr_peaks)
+        
+        ws9.cell(row=row, column=1).value = 'Years with Both Seasons'
+        ws9.cell(row=row, column=2).value = len(common_years)
+        row += 1
+        
+        ws9.cell(row=row, column=1).value = 'Correlation (Long Rains vs Short Rains peaks)'
+        ws9.cell(row=row, column=2).value = f"{corr:.3f}"
+        row += 1
+        
+        ws9.cell(row=row, column=1).value = 'P-value'
+        ws9.cell(row=row, column=2).value = f"{pval:.4f}"
+        row += 1
+        
+        significance = "Statistically significant" if pval < 0.05 else "Not statistically significant"
+        ws9.cell(row=row, column=1).value = 'Significance (α=0.05)'
+        ws9.cell(row=row, column=2).value = significance
+        row += 1
+        
+        if corr > 0.5:
+            interpretation = "Strong positive: High long rains floods often followed by high short rains floods"
+        elif corr > 0.2:
+            interpretation = "Moderate positive: Some relationship between seasonal flood peaks"
+        elif corr > -0.2:
+            interpretation = "Weak/No correlation: Seasons are relatively independent"
+        elif corr > -0.5:
+            interpretation = "Moderate negative: High long rains often followed by low short rains"
+        else:
+            interpretation = "Strong negative: High long rains inversely related to short rains"
+        
+        ws9.cell(row=row, column=1).value = 'Interpretation'
+        ws9.cell(row=row, column=2).value = interpretation
+        row += 1
+    else:
+        ws9.cell(row=row, column=1).value = 'Insufficient data for correlation'
+        ws9.cell(row=row, column=2).value = '(Need both seasons in same years)'
+        row += 1
+    
+    row += 2
+
+ws9.column_dimensions['A'].width = 40
+ws9.column_dimensions['B'].width = 25
+ws9.column_dimensions['C'].width = 20
+ws9.column_dimensions['D'].width = 20
+ws9.column_dimensions['E'].width = 20
+
+# ===== SHEET 10: SEASONAL INSIGHTS & SUMMARY =====
+
+ws10 = wb.create_sheet("10. Seasonal Insights")
+row = 1
+
+ws10.cell(row=row, column=1).value = "ANALYSIS 10: SEASONAL INSIGHTS SUMMARY"
+ws10.cell(row=row, column=1).font = Font(bold=True, size=12, color="FFFFFF")
+ws10.cell(row=row, column=1).fill = PatternFill(start_color="203864", end_color="203864", fill_type="solid")
+ws10.merge_cells(f'A{row}:D{row}')
+row += 2
+
+for station in STATIONS:
+    event_df = results[station]['event_df']
+    threshold = results[station]['threshold']
+    
+    ws10.cell(row=row, column=1).value = f"{station.upper()} - SEASONAL SUMMARY"
+    ws10.cell(row=row, column=1).font = Font(bold=True, size=11, color="FFFFFF")
+    ws10.cell(row=row, column=1).fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
+    ws10.merge_cells(f'A{row}:D{row}')
+    row += 1
+    
+    long_rains = event_df[event_df['season'] == 'Long Rains (Apr-Jun)']
+    short_rains = event_df[event_df['season'] == 'Short Rains (Oct-Dec)']
+    dry_season = event_df[event_df['season'] == 'Dry Season']
+    
+    # Determine which season drives flooding
+    if len(long_rains) > len(short_rains) and len(long_rains) > len(dry_season):
+        dominant_season = "Long Rains (Apr-Jun)"
+        dominant_pct = (len(long_rains) / len(event_df) * 100)
+    elif len(short_rains) > len(long_rains) and len(short_rains) > len(dry_season):
+        dominant_season = "Short Rains (Oct-Dec)"
+        dominant_pct = (len(short_rains) / len(event_df) * 100)
+    else:
+        dominant_season = "Dry Season" if len(dry_season) > 0 else "No dominant season"
+        dominant_pct = (len(dry_season) / len(event_df) * 100) if len(event_df) > 0 else 0
+    
+    insights = []
+    
+    ws10.cell(row=row, column=1).value = "Key Finding:"
+    ws10.cell(row=row, column=2).value = f"Dominant flood season is {dominant_season} ({dominant_pct:.1f}% of events)"
+    row += 2
+    
+    if len(long_rains) > 0:
+        lr_avg_peak = long_rains['peak'].mean()
+        lr_intensity = lr_avg_peak - threshold
+        ws10.cell(row=row, column=1).value = "Long Rains Intensity:"
+        ws10.cell(row=row, column=2).value = f"Mean peak exceeds threshold by {lr_intensity:.0f} units"
+        row += 1
+    
+    if len(short_rains) > 0:
+        sr_avg_peak = short_rains['peak'].mean()
+        sr_intensity = sr_avg_peak - threshold
+        ws10.cell(row=row, column=1).value = "Short Rains Intensity:"
+        ws10.cell(row=row, column=2).value = f"Mean peak exceeds threshold by {sr_intensity:.0f} units"
+        row += 1
+    
+    if len(long_rains) > 0 and len(short_rains) > 0:
+        if long_rains['peak'].mean() > short_rains['peak'].mean():
+            ws10.cell(row=row, column=1).value = "Seasonal Comparison:"
+            ws10.cell(row=row, column=2).value = f"Long Rains produce higher flood peaks on average"
+            row += 1
+        else:
+            ws10.cell(row=row, column=1).value = "Seasonal Comparison:"
+            ws10.cell(row=row, column=2).value = f"Short Rains produce higher flood peaks on average"
+            row += 1
+    
+    ws10.cell(row=row, column=1).value = "Flood Frequency by Season:"
+    ws10.cell(row=row, column=2).value = f"LR: {len(long_rains)} events | SR: {len(short_rains)} events | Dry: {len(dry_season)} events"
+    row += 2
+    
+    row += 1
+
+ws10.column_dimensions['A'].width = 35
+ws10.column_dimensions['B'].width = 50
+ws10.column_dimensions['C'].width = 20
+ws10.column_dimensions['D'].width = 20
+
 # ===== SAVE WORKBOOK =====
+
 wb.save(OUTPUT_FILE)
-print(f"✓ Excel file saved successfully: {OUTPUT_FILE}")
-print(f"\\n✓ ANALYSIS COMPLETE!")
+print(f"\\n✓ Excel file saved successfully: {OUTPUT_FILE}")
+print(f"\\n{'='*90}")
+print(f"✓ ANALYSIS COMPLETE!")
+print(f"{'='*90}")
 print(f"\\nSheets created:")
-print("  1. Event Frequency")
+print("  1. Event Frequency & Characterization")
 print("  2. Decade Trends")
-print("  3. Seasonality")
+print("  3. Seasonality (Monthly Distribution)")
 print("  4. Spatial Comparison")
-print("  5. Annual & POT")
+print("  5. Annual Maximum & POT")
+print("  6. Long Rains Analysis (Apr-Jun)")
+print("  7. Short Rains Analysis (Oct-Dec)")
+print("  8. Seasonal Comparison - Which Season Drives Flooding?")
+print("  9. Cross-Seasonal Correlation - How Seasons Relate to Each Other")
+print("  10. Seasonal Insights Summary")
+print(f"\\n{'='*90}")
+print(f"Output file: {OUTPUT_FILE}")
+print(f"{'='*90}")

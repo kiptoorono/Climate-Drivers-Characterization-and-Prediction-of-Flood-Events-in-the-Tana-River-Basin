@@ -4,6 +4,8 @@
 
 This research characterizes flood dynamics in the Tana River Basin (Kenya) and develops prediction models to support early flood warnings. The project combines hydrological analysis, climate pattern attribution, satellite remote sensing, and machine learning.
 
+![Tana River Basin Map](Tana%20basin%20map.png)
+
 ---
 
 ## Key Research Objectives

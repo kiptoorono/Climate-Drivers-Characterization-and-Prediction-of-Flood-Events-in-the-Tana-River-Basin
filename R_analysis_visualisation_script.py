@@ -527,12 +527,12 @@ axes[-1].set_xlabel('Date', fontweight='bold')
 
 plt.tight_layout()
 plt.savefig(f'{OUTPUT_DIR}09_Time_Series.png', dpi=300, bbox_inches='tight')
-print("✓ Saved: 09_Time_Series.png")
+print("Saved: 09_Time_Series.png")
 plt.close()
 
 #  SUMMARY 
 print("\\n" + "=" * 80)
-print("✓ VISUALIZATION COMPLETE!")
+print(" VISUALIZATION COMPLETE!")
 print("=" * 80)
 print(f"\\nAll visualizations saved to: {OUTPUT_DIR}")
 print("\\nFiles created:")

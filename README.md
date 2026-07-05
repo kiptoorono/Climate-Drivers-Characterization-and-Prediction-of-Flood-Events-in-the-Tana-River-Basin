@@ -6,10 +6,6 @@ This research characterizes flood dynamics in the Tana River Basin (Kenya) and d
 
 ![Tana River Basin Map](Tana%20basin%20map.png)
 
-![Figure: Temporal river level time series for BURA, GALOLE, and GARSEN](flood_visualizations/09_Time_Series.png)
-
-*Figure: Temporal time series of river level measured at three stations — BURA, GALOLE, and GARSEN.*
-
 ---
 
 ## Key Research Objectives
@@ -36,7 +32,6 @@ This research characterizes flood dynamics in the Tana River Basin (Kenya) and d
 
 ## Data Sources
 
-- **River discharge**: Daily readings from monitoring stations (Garissa, Bura, Galole/Hola, Garsen)
 - **Riverflow data source**: Water Resources Authority (WRA), Kenya
 - **Geospatial**: Kenya administrative boundaries (GADM), water basins, hillshade elevation model
 - **Future**: Sentinel-1/2 satellite imagery, CHIRPS rainfall data, GloFAS flood forecasts

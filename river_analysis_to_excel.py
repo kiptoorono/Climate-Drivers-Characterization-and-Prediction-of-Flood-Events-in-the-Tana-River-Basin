@@ -9,7 +9,6 @@ from openpyxl.utils import get_column_letter
 from openpyxl.utils.dataframe import dataframe_to_rows
 warnings.filterwarnings('ignore')
 
-# ===== CONFIGURATION =====
 
 EXCEL_FILE = 'TanaRiver Flow.xlsx'
 SHEET_NAME = 'Rawdata'
@@ -28,7 +27,6 @@ OUTPUT_FILE = 'Flood_Analysis_Results_Seasonality.xlsx'
 LONG_RAINS = [4, 5, 6]        # April, May, June
 SHORT_RAINS = [10, 11, 12]    # October, November, December
 
-# ===== FORMATTING UTILITIES =====
 
 def format_header_row(ws, row_num, num_cols):
     """Format header row with styling"""
@@ -62,7 +60,6 @@ def format_data_cells(ws, start_row, end_row, num_cols):
             if col > 1:
                 cell.alignment = Alignment(horizontal='right', vertical='center')
 
-# ===== SEASONALITY CLASSIFICATION =====
 
 def classify_season(month):
     """Classify month into season: Long Rains, Short Rains, or Dry"""
@@ -73,7 +70,6 @@ def classify_season(month):
     else:
         return 'Dry Season'
 
-# ===== YEAR-AWARE ROLLING MAX =====
 
 def year_aware_rolling_max(series, dates, year_col, window=14):
     """Calculate 14-day rolling max that respects year boundaries."""
@@ -100,7 +96,7 @@ def year_aware_rolling_max(series, dates, year_col, window=14):
 
     return result
 
-# ===== IDENTIFY FLOOD EVENTS =====
+#  IDENTIFY FLOOD EVENTS 
 
 def identify_flood_events(rolling_max_series, threshold):
     """Identify flood events: start when rolling_max > threshold, end when <= threshold."""
@@ -124,7 +120,7 @@ def identify_flood_events(rolling_max_series, threshold):
 
     return event_numbers
 
-# ===== MARK EVENT DATES =====
+# MARK EVENT DATES 
 
 def mark_event_dates(event_numbers, dates):
     """Mark event start/end dates and duration."""
@@ -159,7 +155,7 @@ def mark_event_dates(event_numbers, dates):
 
     return start_dates, end_dates, durations
 
-# ===== CALCULATE EVENT BLOCK MAX =====
+# CALCULATE EVENT BLOCK MAX
 
 def calculate_event_block_max(event_numbers, rolling_values):
     """Record highest rolling window value at event end date."""
@@ -181,7 +177,7 @@ def calculate_event_block_max(event_numbers, rolling_values):
 
     return event_block_max
 
-# ===== LOAD & PREPARE DATA =====
+# LOAD & PREPARE DATA 
 
 print("=" * 90)
 print("FLOOD EVENT ANALYSIS WITH BIMODAL SEASONALITY - EXCEL EXPORT")
@@ -204,7 +200,6 @@ print(f"✓ Data loaded: {raw_data['date'].min()} to {raw_data['date'].max()}")
 print(f"✓ Total records: {len(raw_data)}")
 print(f"✓ Years covered: {raw_data['year'].min()} to {raw_data['year'].max()}")
 
-# ===== PROCESS EACH STATION =====
 
 results = {}
 
@@ -229,7 +224,7 @@ for station in STATIONS:
     
     print(f"✓ {station}: {len([e for e in events if e > 0])} events identified")
 
-# ===== CREATE EVENT DATAFRAMES WITH SEASONALITY =====
+# CREATE EVENT DATAFRAMES WITH SEASONALITY 
 
 for station in STATIONS:
     events = results[station]['events']
@@ -260,13 +255,13 @@ for station in STATIONS:
     event_df = pd.DataFrame(event_data_list).drop_duplicates(subset=['event_num'])
     results[station]['event_df'] = event_df
 
-# ===== CREATE EXCEL WORKBOOK =====
+#  CREATE EXCEL WORKBOOK 
 
 print(f"\\n[STEP 3] Creating Excel file: {OUTPUT_FILE}...")
 wb = Workbook()
 wb.remove(wb.active)
 
-# ===== SHEET 1: EVENT FREQUENCY ANALYSIS =====
+#  SHEET 1: EVENT FREQUENCY ANALYSIS 
 
 ws1 = wb.create_sheet("1. Event Frequency")
 row = 1

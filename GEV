@@ -1,0 +1,217 @@
+import os, sys
+import argparse
+from datetime import datetime
+import numpy as np
+import pandas as pd
+from scipy import stats
+from openpyxl import Workbook
+
+# ---------------- default settings (changeable) ----------------
+INPUT_FILE = "TanaRiver Flow.xlsx"      
+SHEET_NAME = None                      
+DATE_COL_CANDIDATES = ["date", "Date", "DATE"]  
+RETURN_PERIODS = [2,5,10,20,50,100]
+BOOTSTRAP_ITERS = 1000
+MIN_YEARS = 10
+POOL_METHOD = "max"    
+OUTPUT_FILE = "GEV_from_daily_output.xlsx"
+# ----------------------------------------------------------------
+
+def find_date_column(df):
+    # try obvious names first
+    for c in df.columns:
+        if str(c).lower() == "date":
+            return c
+    # otherwise try to parse first column as date if many non-numeric values
+    for c in df.columns:
+        try:
+            _ = pd.to_datetime(df[c].iloc[:10], format='%Y-%m-%d %H:%M:%S', errors='coerce')
+            if _.notna().sum() >= 6:
+                return c
+        except Exception:
+            continue
+    return None
+
+def compute_annual_maxima_from_daily(df, date_col, pool_method="max"):
+    # df: DataFrame with date_col and station columns
+    d = df.copy()
+    d[date_col] = pd.to_datetime(d[date_col], format='%Y-%m-%d %H:%M:%S', errors='coerce')
+    if d[date_col].isna().all():
+        raise ValueError("Could not parse any dates from the date column.")
+    d = d.dropna(subset=[date_col])
+    d['year'] = d[date_col].dt.year.astype(int)
+    # station columns = all columns except date_col and year
+    station_cols = [c for c in d.columns if c not in [date_col, 'year']]
+    # coerce to numeric
+    for c in station_cols:
+        d[c] = pd.to_numeric(d[c], errors='coerce')
+    # group by year and compute per-station annual maxima
+    per_station_am = {}
+    for c in station_cols:
+        am = d.groupby('year')[c].max().reset_index().rename(columns={c:'annual_max'})
+        am = am.dropna(subset=['annual_max'])
+        per_station_am[c] = am.sort_values('year').reset_index(drop=True)
+    if pool_method == "perstation":
+        return per_station_am, None
+    elif pool_method == "max":
+        # produce single DataFrame with year and pooled annual_max = max across stations for that year
+        # first pivot to year x station annual max
+        pivot = pd.DataFrame({'year': sorted(set(d['year'].dropna().astype(int)))})
+        pivot = pivot.set_index('year')
+        for st, am in per_station_am.items():
+            pivot = pivot.join(am.set_index('year')['annual_max'].rename(st), how='left')
+        # take max across station columns per year (skip NaNs)
+        pivot['annual_max'] = pivot.max(axis=1, skipna=True)
+        pooled = pivot[['annual_max']].reset_index()
+        pooled = pooled.dropna(subset=['annual_max']).reset_index(drop=True)
+        return per_station_am, pooled
+    else:
+        raise ValueError("pool_method must be 'max' or 'perstation'")
+
+def fit_gev_mle(annual_vals):
+    data = np.asarray(annual_vals, dtype=float)
+    data = data[~np.isnan(data)]
+    if len(data) < 3:
+        raise ValueError("Need at least 3 annual values to fit GEV.")
+    c, loc, scale = stats.genextreme.fit(data)  # scipy's c = -xi
+    xi = -c
+    mu = loc
+    sigma = scale
+    return {'xi': xi, 'sigma': sigma, 'mu': mu, 'n': len(data)}
+
+def gev_return_level(params, T):
+    xi = float(params['xi']); sigma = float(params['sigma']); mu = float(params['mu'])
+    p = 1.0 - 1.0/float(T)
+    if sigma <= 0:
+        return np.nan
+    if abs(xi) < 1e-12:
+        return mu - sigma * np.log(-np.log(p))
+    else:
+        return mu + (sigma/xi)*(( -np.log(p) )**(-xi) - 1.0)
+
+def bootstrap_gev(annual_vals, return_periods, n_boot=1000, rng=None):
+    if rng is None:
+        rng = np.random.default_rng()
+    data = np.asarray(annual_vals, dtype=float)
+    data = data[~np.isnan(data)]
+    n = len(data)
+    if n < 3:
+        raise ValueError("Need at least 3 points for bootstrap.")
+    rl_boot = {T: [] for T in return_periods}
+    params_boot = []
+    for i in range(n_boot):
+        sample = rng.choice(data, size=n, replace=True)
+        try:
+            p = fit_gev_mle(sample)
+        except Exception:
+            params_boot.append({'xi':np.nan,'sigma':np.nan,'mu':np.nan})
+            for T in return_periods:
+                rl_boot[T].append(np.nan)
+            continue
+        params_boot.append(p)
+        for T in return_periods:
+            rl_boot[T].append(gev_return_level(p, T))
+    return params_boot, rl_boot
+
+def ci_from_bootstrap(arr, alpha=0.05):
+    a = np.asarray(arr)
+    a = a[~np.isnan(a)]
+    if len(a) == 0:
+        return (np.nan, np.nan)
+    lo = np.percentile(a, 100*(alpha/2.0))
+    hi = np.percentile(a, 100*(1.0-alpha/2.0))
+    return (lo, hi)
+
+def main(args):
+    infile = args.input
+    sheet = args.sheet
+    pool_method = args.pool
+    output = args.output
+    bpits = args.bootstrap
+    minyears = args.minyears
+    rps = list(map(int, args.returnperiods.split(',')))
+
+    if not os.path.exists(infile):
+        print("Input file not found:", infile, file=sys.stderr); sys.exit(1)
+    xls = pd.ExcelFile(infile)
+    if sheet is None:
+        sheet = xls.sheet_names[0]
+    df = pd.read_excel(xls, sheet)
+    date_col = find_date_column(df)
+    if date_col is None:
+        raise ValueError("Could not find a date column. Please ensure a date column exists.")
+    per_station_am, pooled = compute_annual_maxima_from_daily(df, date_col, pool_method=pool_method)
+    wb = Workbook()
+    if 'Sheet' in wb.sheetnames: wb.remove(wb['Sheet'])
+    summary_ws = wb.create_sheet("Summary")
+    summary_ws.append(["Input file", infile])
+    summary_ws.append(["Sheet used", sheet])
+    summary_ws.append(["Date column detected", str(date_col)])
+    summary_ws.append(["Pool method", pool_method])
+    summary_ws.append(["Bootstrap iters", bpits])
+    summary_ws.append(["Return periods", ','.join(map(str,rps))])
+    # Decide which series to fit
+    series_to_fit = {}
+    if pool_method == "max":
+        # pooled is a DataFrame year, annual_max
+        if pooled is None or len(pooled) < minyears:
+            raise ValueError(f"Pooled annual-maxima has {len(pooled) if pooled is not None else 0} years; need >= {minyears}.")
+        series_to_fit['POOLED_MAX'] = pooled
+    else:
+        # per station
+        for st, am in per_station_am.items():
+            if len(am) >= minyears:
+                series_to_fit[st] = am
+            else:
+                print(f"Station {st} skipped (only {len(am)} years, < {minyears}).")
+        if not series_to_fit:
+            raise ValueError("No station has sufficient years to fit.")
+
+    for name, amdf in series_to_fit.items():
+        years = amdf['year'].astype(int).tolist()
+        vals = amdf['annual_max'].astype(float).values
+        params = fit_gev_mle(vals)
+        rl = {T: gev_return_level(params, T) for T in rps}
+        pboot, rlboot = bootstrap_gev(vals, rps, n_boot=bpits)
+        rl_ci = {T: ci_from_bootstrap(rlboot[T], alpha=0.05) for T in rps}
+        xi_boot = np.array([p['xi'] for p in pboot], dtype=float)
+        sigma_boot = np.array([p['sigma'] for p in pboot], dtype=float)
+        mu_boot = np.array([p['mu'] for p in pboot], dtype=float)
+        xi_ci = ci_from_bootstrap(xi_boot)
+        sigma_ci = ci_from_bootstrap(sigma_boot)
+        mu_ci = ci_from_bootstrap(mu_boot)
+
+        ws = wb.create_sheet(f"GEV_{str(name)}"[:31])
+        ws.append([f"Series: {name}"])
+        ws.append(['N_years', params['n']])
+        ws.append(['xi (shape)', params['xi']])
+        ws.append(['sigma (scale)', params['sigma']])
+        ws.append(['mu (location)', params['mu']])
+        ws.append([])
+        ws.append(['Parameter','CI_lower','CI_upper'])
+        ws.append(['xi', xi_ci[0], xi_ci[1]])
+        ws.append(['sigma', sigma_ci[0], sigma_ci[1]])
+        ws.append(['mu', mu_ci[0], mu_ci[1]])
+        ws.append([])
+        ws.append(['Return_period_years','Estimate','CI_low','CI_high'])
+        for T in rps:
+            lo, hi = rl_ci[T]
+            ws.append([T, rl[T], lo, hi])
+        ws.append([])
+        ws.append(['Years_used'] + years)
+
+    wb.save(output)
+    print("Saved output to", output)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Fit GEV from daily flows")
+    parser.add_argument("--input","-i", default=INPUT_FILE)
+    parser.add_argument("--sheet","-s", default=SHEET_NAME)
+    parser.add_argument("--pool","-p", default=POOL_METHOD, choices=['max','perstation'],
+                        help="'max' = pooled regional max across stations per year; 'perstation' = individual station fits")
+    parser.add_argument("--output","-o", default=OUTPUT_FILE)
+    parser.add_argument("--bootstrap","-b", type=int, default=BOOTSTRAP_ITERS)
+    parser.add_argument("--minyears","-m", type=int, default=MIN_YEARS)
+    parser.add_argument("--returnperiods","-r", default="2,5,10,20,50,100")
+    args = parser.parse_args()
+    main(args)
